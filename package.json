@@ -1,0 +1,15 @@
+{
+  "name": "PowPow",
+  "description": "A Space War like game",
+  "version": "0.0.1",
+  "private": false,
+  "dependencies": {
+  },
+  "happyFunTimes": {
+    "gameId": "powpow",
+    "category": "game",
+    "apiVersion": "0.0.0",
+    "gameType": "html",
+    "minPlayers": 2
+  }
+}
