@@ -33,7 +33,23 @@
 var g_metaQueuePlayer;
 var g_updateStatus = false;
 
-var main = function(
+// Start the main app logic.
+requirejs([
+    'hft/gameserver',
+    'hft/gamesupport',
+    'hft/localnetplayer',
+    'hft/misc/input',
+    'hft/misc/misc',
+    '../bower_components/tdl/tdl/webgl',
+    '../bower_components/hft-utils/dist/audio',
+    '../bower_components/hft-utils/dist/entitysystem',
+    'canvasrenderer',
+    'webglrenderer',
+    'playermanager',
+    'metaplayer',
+    'queuemanager',
+    'scoremanager',
+  ], function(
     GameServer,
     GameSupport,
     LocalNetPlayer,
@@ -277,26 +293,6 @@ window.s = g_services;
     Input.setupKeys(keys);
 
   }
-};
-
-// Start the main app logic.
-requirejs([
-    'hft/gameserver',
-    'hft/gamesupport',
-    'hft/localnetplayer',
-    'hft/misc/input',
-    'hft/misc/misc',
-    '../bower_components/tdl/tdl/webgl',
-    '../bower_components/hft-utils/dist/audio',
-    '../bower_components/hft-utils/dist/entitysystem',
-    'canvasrenderer',
-    'webglrenderer',
-    'playermanager',
-    'metaplayer',
-    'queuemanager',
-    'scoremanager',
-  ],
-  main
-);
+});
 
 

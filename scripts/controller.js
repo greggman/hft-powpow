@@ -30,7 +30,17 @@
  */
 "use strict";
 
-var main = function(
+// Start the main app logic.
+requirejs([
+    'hft/commonui',
+    'hft/gameclient',
+    'hft/misc/input',
+    'hft/misc/misc',
+    'hft/misc/mobilehacks',
+    'hft/misc/touch',
+    '../bower_components/hft-utils/dist/audio',
+    'ships',
+  ], function(
     CommonUI,
     GameClient,
     Input,
@@ -220,19 +230,6 @@ var main = function(
   keys[Input.cursorKeys.kRight] = function(e) { handleLeftRight(e.pressed, 0x2); }
   keys["Z".charCodeAt(0)]       = function(e) { handleFire(e.pressed);           }
   Input.setupKeys(keys);
-};
+});
 
-// Start the main app logic.
-requirejs([
-    'hft/commonui',
-    'hft/gameclient',
-    'hft/misc/input',
-    'hft/misc/misc',
-    'hft/misc/mobilehacks',
-    'hft/misc/touch',
-    '../bower_components/hft-utils/dist/audio',
-    'ships',
-  ],
-  main
-);
 
