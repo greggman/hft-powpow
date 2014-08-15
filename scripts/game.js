@@ -167,9 +167,7 @@ window.s = g_services;
 
   var server;
   if (globals.haveServer) {
-    server = new GameServer({
-      gameId: "powpow",
-    });
+    server = new GameServer();
     g_services.server = server;
     server.addEventListener('playerconnect', startPlayer);
   }

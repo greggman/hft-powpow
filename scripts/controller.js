@@ -196,9 +196,7 @@ requirejs([
   Ships.setShipSize(60);
   g_audioManager = new AudioManager(sounds);
 
-  g_client = new GameClient({
-    gameId: "powpow",
-  });
+  g_client = new GameClient();
 
   g_client.addEventListener('setColor', handleSetColorMsg);
   g_client.addEventListener('kill', handleKillMsg);
