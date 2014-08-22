@@ -82,7 +82,6 @@ requirejs([
     maxShots: 2,
     shotDuration: 3,
     shotVelocity: 300,
-    port: 8080,
     haveServer: true,
     width: 100,
     height: 100,
