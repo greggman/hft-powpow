@@ -222,7 +222,7 @@ define([
         name: this.playerName
       });
     } else {
-      this.playerName = newName;
+      this.setName(newName);
     }
     this.showPlaceInQueue = true;
     g_updateStatus = true;
