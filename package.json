@@ -2,7 +2,7 @@
   "dependencies": {},
   "description": "A Space War like game",
   "happyFunTimes": {
-    "apiVersion": "1.9.0",
+    "apiVersion": "1.10.0",
     "category": "game",
     "gameId": "powpow",
     "gameType": "html",
@@ -10,5 +10,5 @@
   },
   "name": "PowPow",
   "private": false,
-  "version": "0.0.4"
+  "version": "0.0.6"
 }

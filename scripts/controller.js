@@ -64,9 +64,11 @@ requirejs([
 
   var globals = {
     messageDuration: 5,
+    orientation: "landscape-primary",
   };
   Misc.applyUrlSettings(globals);
   MobileHacks.fixHeightHack();
+  MobileHacks.disableContextMenu();
   MobileHacks.adjustCSSBasedOnPhone([
     {
       test: MobileHacks.isIOS8OrNewerAndiPhone4OrIPhone5,
