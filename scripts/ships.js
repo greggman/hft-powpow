@@ -30,7 +30,7 @@
  */
 "use strict";
 
-define([], function() {
+define(function() {
 
   var g_colors = [
     [1.0, 0.0, 0.0],
@@ -174,6 +174,6 @@ define([], function() {
     }
   };
 
-}());
+});
 
 
