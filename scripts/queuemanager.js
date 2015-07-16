@@ -166,7 +166,7 @@ define(["./plistmanager"], function(PListManager) {
     if (index >= 0) {
       this.queue_.splice(index, 1);
       this.draw();
-      this.sendPlaces();
+    this.sendPlaces();
       return;
     }
     var index = this.launching_.indexOf(player);
@@ -187,6 +187,7 @@ define(["./plistmanager"], function(PListManager) {
         var player = this.queue_.shift()
         player.countdown();
         this.launching_.push(player);
+        this.sendPlaces();
         this.timer_ = 1;  // don't start another for at least 1 second.
         this.draw();
       }

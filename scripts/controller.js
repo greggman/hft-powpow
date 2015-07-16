@@ -61,6 +61,12 @@ requirejs([
   var g_client;
   var g_audioManager;
   var g_clearMsgTimeoutId;
+  var g_oldShowGhost;
+  var g_showGhost = true;
+  var g_canvas;
+  var g_ctx;
+  var g_shipColor = "black";
+  var g_shipStyle;
 
   var globals = {
     messageDuration: 5,
@@ -89,10 +95,19 @@ requirejs([
 
   var msgElem = $("msg");
   var colorElem = $("buttons");
+  var g_canvas = $("avatar");
+  g_canvas.width  = g_canvas.clientWidth;
+  g_canvas.height = g_canvas.clientHeight;
+  g_ctx = g_canvas.getContext("2d");
 
   var clearMessage = function() {
     g_clearMsgTimeoutId = undefined;
-    msgElem.innerHTML = "";
+    msgElem.innerHTML = g_showGhost ? "Control the ghost ship!" : "";
+    msgElem.style.color = "#FFF";
+    if (g_showGhost !== g_oldShowGhost) {
+      g_oldShowGhost = g_showGhost;
+      drawShip();
+    }
   };
 
   var setClearMessageTimeout = function() {
@@ -135,22 +150,43 @@ requirejs([
     g_states[g_state]();
   };
 
-
-  function handleSetColorMsg(msg) {
-    var canvas = document.createElement("canvas");
-    canvas.width = 150;
-    canvas.height = 150;
-    var xOff = canvas.width / 2;
-    var yOff = canvas.height / 2;
-    var ctx = canvas.getContext("2d");
-    var styleName = Ships.styles[msg.style];
+  function drawPlayerShip() {
+    g_ctx.clearRect(0, 0, g_canvas.width, g_canvas.height);
+    var xOff = g_canvas.width / 2;
+    var yOff = g_canvas.height / 2;
+    var styleName = Ships.styles[g_shipStyle];
     for (var yy = -2; yy <= 2; ++yy) {
       for (var xx = -2; xx <=2; ++xx) {
-        Ships.drawShip(ctx, xx + xOff, yy + yOff, Math.PI, "#000");
+        Ships.drawShip(g_ctx, xx + xOff, yy + yOff, Math.PI, "#000");
       }
     }
-    Ships[styleName](ctx, xOff, yOff, Math.PI, msg.color);
-    $("avatar").src = canvas.toDataURL();
+    Ships[styleName](g_ctx, xOff, yOff, Math.PI, g_shipColor);
+  }
+
+  function drawGhostShip() {
+    var xOff = g_canvas.width / 2;
+    var yOff = g_canvas.height / 2;
+    g_ctx.clearRect(0, 0, g_canvas.width, g_canvas.height);
+    for (var ii = 0; ii < 6; ++ii) {
+      var xx = Math.random() * 10 - 5 | 0;
+      var yy = Math.random() * 10 - 5 | 0;
+      Ships.drawShip(g_ctx, xx + xOff, yy + yOff, Math.PI, "#FFF");
+    }
+    Ships.drawShip(g_ctx, xOff, yOff, Math.PI, "#000");
+  }
+
+  function drawShip() {
+    if (g_showGhost) {
+      drawGhostShip();
+    } else {
+      drawPlayerShip();
+    }
+  }
+
+  function handleSetColorMsg(msg) {
+    g_shipColor = msg.color;
+    g_shipStyle = msg.style;
+    clearMessage();
   }
 
   function handleKillMsg(msg) {
@@ -163,6 +199,7 @@ requirejs([
     g_state = "die";
     g_count = 20;
     setTimeout(process, 100);
+    g_showGhost = true;
   }
 
   function handleLaunchMsg(msg) {
@@ -171,6 +208,8 @@ requirejs([
     g_state = "launch";
     g_count = 30;
     setTimeout(process, 100);
+    g_showGhost = false;
+    drawShip();
   }
 
   function handleQueueMsg(msg) {

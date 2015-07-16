@@ -124,6 +124,7 @@ define([
         if (g.haveServer || this.services.playerManager.getNumActivePlayers() >= 2) {
           this.addToQueue();
         } else {
+          // this path is testing local players only
           this.setState('fly');
           this.services.playerManager.addToActive(this);
         }
@@ -138,6 +139,7 @@ define([
   };
 
   Player.prototype.addToQueue = function() {
+    this.showPlaceInQueue = true;
     this.services.queueManager.addToQueue(this);
     this.setState('queued');
   }
@@ -260,9 +262,7 @@ define([
   Player.prototype.countdown = function() {
     this.timer = 3;
     this.setState('countdown');
-    if (this.showPlaceInQueue) {
-      this.sendCmd('launch');
-    }
+    this.sendCmd('launch');
   };
 
   Player.prototype.state_countdown = function() {
