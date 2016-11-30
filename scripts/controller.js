@@ -32,23 +32,24 @@
 
 // Start the main app logic.
 requirejs([
-    'hft/commonui',
-    'hft/gameclient',
-    'hft/misc/input',
-    'hft/misc/misc',
-    'hft/misc/mobilehacks',
-    'hft/misc/touch',
+    '../node_modules/happyfuntimes/dist/hft',
+    '../node_modules/hft-sample-ui/dist/sample-ui',
+    '../node_modules/hft-game-utils/dist/game-utils',
     '../bower_components/hft-utils/dist/audio',
     'ships',
   ], function(
-    CommonUI,
-    GameClient,
-    Input,
-    Misc,
-    MobileHacks,
-    Touch,
+    hft,
+    sampleUI,
+    gameUtils,
     AudioManager,
     Ships) {
+
+  var GameClient = hft.GameClient;
+  var CommonUI = sampleUI.commonUI;
+  var Input = sampleUI.input;
+  var Misc = sampleUI.misc;
+  var MobileHacks = sampleUI.mobileHacks;
+  var Touch = sampleUI.touch;
 
   var g_name = "";
   var g_leftRight = 0;
@@ -252,13 +253,15 @@ requirejs([
 
   g_client = new GameClient();
 
-  g_client.addEventListener('setColor', handleSetColorMsg);
-  g_client.addEventListener('kill', handleKillMsg);
-  g_client.addEventListener('die', handleDieMsg);
-  g_client.addEventListener('launch', handleLaunchMsg);
-  g_client.addEventListener('queue', handleQueueMsg);
+  g_client.on('setColor', handleSetColorMsg);
+  g_client.on('kill', handleKillMsg);
+  g_client.on('die', handleDieMsg);
+  g_client.on('launch', handleLaunchMsg);
+  g_client.on('queue', handleQueueMsg);
 
   CommonUI.setupStandardControllerUI(g_client, globals);
+  CommonUI.askForNameOnce();   // ask for the user's name if not set
+  CommonUI.showMenu(true);     // shows the gear menu
 
   Touch.setupButtons({
     inputElement: $("buttons"),

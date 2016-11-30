@@ -30,16 +30,18 @@
  */
 "use strict";
 
-var g_metaQueuePlayer;
-var g_updateStatus = false;
+const isDevMode = process.env.NODE_ENV === 'development';
+const requirejs = require('requirejs');
+requirejs.config({
+  nodeRequire: require,
+  baseUrl: __dirname,
+});
 
 // Start the main app logic.
 requirejs([
-    'hft/gameserver',
-    'hft/gamesupport',
-    'hft/localnetplayer',
-    'hft/misc/input',
-    'hft/misc/misc',
+    'happyfuntimes',
+    'hft-game-utils',
+    'hft-sample-ui',
     '../bower_components/tdl/tdl/webgl',
     '../bower_components/hft-utils/dist/audio',
     '../bower_components/hft-utils/dist/entitysystem',
@@ -50,11 +52,9 @@ requirejs([
     'queuemanager',
     'scoremanager',
   ], function(
-    GameServer,
-    GameSupport,
-    LocalNetPlayer,
-    Input,
-    Misc,
+    happyfuntimes,
+    gameUtils,
+    sampleUI,
     WebGL,
     AudioManager,
     EntitySystem,
@@ -64,6 +64,12 @@ requirejs([
     MetaQueuePlayer,
     QueueManager,
     ScoreManager) {
+
+  var GameServer = happyfuntimes.GameServer;
+  var LocalNetPlayer = happyfuntimes.LocalNetPlayer;
+  var GameSupport = gameUtils.gameSupport;
+  var Input = sampleUI.input;
+  var Misc = sampleUI.misc;
 
   var g_canvas;
   var g_debug = false;
@@ -140,14 +146,14 @@ requirejs([
   }
 
   function startMetaQueuePlayer() {
-    if (g_metaQueuePlayer)
-      return g_metaQueuePlayer;
+    if (globals.metaQueuePlayer)
+      return globals.metaQueuePlayer;
     var x = g_canvas.width / 2;
     var y = g_canvas.height / 2;
     var direction = Math.random() * Math.PI * 2;
 
-    g_metaQueuePlayer = new MetaQueuePlayer(g_services, x, y, direction);
-    return g_metaQueuePlayer;
+    globals.metaQueuePlayer = new MetaQueuePlayer(g_services, x, y, direction);
+    return globals.metaQueuePlayer;
   }
 
   Misc.applyUrlSettings(globals);
@@ -213,8 +219,8 @@ window.s = g_services;
 
   startMetaQueuePlayer();
 
-  // Add a 2 players if there is no communication
-  if (!globals.haveServer) {
+  // Add a players if dev mode
+  if (isDevMode) {
     startLocalPlayers();
   }
 
@@ -229,7 +235,7 @@ window.s = g_services;
 
     renderer.begin();
 
-    g_metaQueuePlayer.draw(renderer);
+    globals.metaQueuePlayer.draw(renderer);
     playerManager.draw(renderer);
     drawSystem.processEntities(renderer);
     drawSystem.forEachEntity(function(e) {
@@ -240,8 +246,8 @@ window.s = g_services;
     scoreMgr.draw(renderer);
     renderer.end();
 
-    if (g_updateStatus) {
-      g_updateStatus = false;
+    if (globals.updateStatus) {
+      globals.updateStatus = false;
       queueMgr.draw();
       scoreMgr.drawScores();
     }

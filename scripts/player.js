@@ -31,19 +31,21 @@
 "use strict";
 
 define([
-    'hft/misc/misc',
-    'hft/misc/strings',
+    '../node_modules/hft-sample-ui/dist/sample-ui',
     '../bower_components/tdl/tdl/math',
     '../bower_components/hft-utils/dist/2d',
     './ships',
     './shot',
   ], function(
-    Misc,
-    Strings,
+    sampleUI,
     math,
     M2D,
     Ships,
     Shot) {
+  var Misc = sampleUI.misc;
+  var Strings = sampleUI.strings;
+  const PlayerNameManager = sampleUI.PlayerNameManager;
+
   var availableColors = [];
 
   /**
@@ -79,12 +81,16 @@ define([
       availableColors.splice(ndx, 1);
 
       if (netPlayer) {
-        netPlayer.addEventListener('disconnect', Player.prototype.handleDisconnect.bind(this));
-        netPlayer.addEventListener('turn', Player.prototype.handleTurnMsg.bind(this));
-        netPlayer.addEventListener('target', Player.prototype.handleTargetMsg.bind(this));
-        netPlayer.addEventListener('fire', Player.prototype.handleFireMsg.bind(this));
-        netPlayer.addEventListener('setName', Player.prototype.handleNameMsg.bind(this));
-        netPlayer.addEventListener('busy', Player.prototype.handleBusyMsg.bind(this));
+        this.playerNameManager = new PlayerNameManager(netPlayer);
+
+        netPlayer.on('disconnect', Player.prototype.handleDisconnect.bind(this));
+        netPlayer.on('turn', Player.prototype.handleTurnMsg.bind(this));
+        netPlayer.on('target', Player.prototype.handleTargetMsg.bind(this));
+        netPlayer.on('fire', Player.prototype.handleFireMsg.bind(this));
+
+        this.playerNameManager.on('setName', Player.prototype.handleNameMsg.bind(this));
+        this.playerNameManager.on('busy', Player.prototype.handleBusyMsg.bind(this));
+
         this.sendCmd('setColor', {
           color: this.color.canvasColor,
           style: this.color.style,
@@ -217,17 +223,11 @@ define([
     this.scoreLine.setMsg(Strings.padLeft(this.score, 3, "0") + ": ");
   };
 
-  Player.prototype.handleNameMsg = function(msg) {
-    var newName = msg.name.replace(/[<>]/g, '');
-    if (!newName) {
-      this.sendCmd('setName', {
-        name: this.playerName
-      });
-    } else {
-      this.setName(newName);
-    }
+  Player.prototype.handleNameMsg = function(name) {
+    var newName = name.replace(/[<>]/g, '');
+    this.setName(newName);
     this.showPlaceInQueue = true;
-    g_updateStatus = true;
+    this.services.globals.updateStatus = true;
   };
 
   Player.prototype.handleBusyMsg = function(msg) {
@@ -236,6 +236,7 @@ define([
 
   Player.prototype.state_queued = function() {
     this.updateDirection();
+    var g_metaQueuePlayer = this.services.globals.metaQueuePlayer;
 
     // I'm not sure of an easy way to separate this.
     // I could make every player have a onQueued callback.

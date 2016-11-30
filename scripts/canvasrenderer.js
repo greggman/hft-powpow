@@ -31,7 +31,10 @@
 
 "use strict";
 
-define(["hft/misc/misc", "./ships"], function(Misc, Ships) {
+define(["hft-sample-ui", "./ships"], function(sampleUI, Ships) {
+
+  const Misc = sampleUI.misc;
+
   var CanvasRenderer = function(services, canvas) {
     this.services = services;
     this.canvas = canvas;
