@@ -5,6 +5,7 @@ const isDevMode = process.env.NODE_ENV === 'development';
 
 var optionSpec = {
   options: [
+   { option: 'demo',             type: 'Boolean', description: 'put random characters in'},
    { option: 'port', alias: 'p', type: 'Int',     description: 'port. Default 18679'},
    { option: 'dns',              type: 'Boolean', description: 'enable dns server'},
    { option: 'address',          type: 'String',  description: 'ip address for dns and controller url conversion'},
@@ -87,6 +88,7 @@ function createWindow() {
 
   const settings = {
     hftUrl: 'ws://localhost:' + state.port,
+    demo: args.demo,
   };
   const settingsStr = querystring.stringify(settings);
   gameWindow.loadURL(`file://${__dirname}/game.html?${settingsStr}`);
