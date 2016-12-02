@@ -76,6 +76,25 @@ requirejs([
   var g_logGLCalls = false;
   var g_services = {};
 
+  const instructionElem = $("instruction");
+  instructionElem.addEventListener('click', hideInstructions);
+  instructionElem.addEventListener('touchstart', hideInstructions);
+  instructionElem.addEventListener('pointerdown', hideInstructions);
+  showInstructions();
+  $("outer").addEventListener('click', showInstructions);
+  $("outer").addEventListener('touchstart', showInstructions);
+  $("outer").addEventListener('pointerdown', showInstructions);
+
+  function hideInstructions() {
+    instructionElem.style.display = "none";
+  }
+  function showInstructions() {
+    instructionElem.style.display = "block";
+  }
+  g_services.hideInstructions = hideInstructions;
+
+  var settings = Misc.parseUrlQuery();
+
   // You can set these from the URL with
   // http://path/gameview.html?settings={name:value,name:value}
   var globals = {
