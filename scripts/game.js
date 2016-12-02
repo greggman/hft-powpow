@@ -251,6 +251,7 @@ window.s = g_services;
     queueMgr.process();
     entitySys.processEntities();
     scoreMgr.update();
+    processAIPlayers();
 
     renderer.begin();
 
@@ -315,6 +316,66 @@ window.s = g_services;
     Input.setupKeys(keys);
 
   }
+
+  const g_localAIPlayers = [];
+
+  function processAIPlayers() {
+    g_localAIPlayers.forEach(processAIPlayer);
+  }
+
+  function processAIPlayer(p) {
+    p.process();
+  }
+
+  function rand(min, max) {
+    if (max === undefined) {
+      max = min;
+      min = 0;
+    }
+    return (Math.random() * (max - min) + min) | 0;
+  }
+
+  class AIPlayer {
+    constructor() {
+      this.localNetPlayer = new LocalNetPlayer();
+      this.dir = 0;
+      this.fireTimer = 0;
+      this.dirTimer = 0;
+    }
+    process() {
+      this.fireTimer--;
+      if (this.fireTimer === 3) {
+        this.localNetPlayer.sendEvent('fire', {
+          fire: true,
+        });
+      }
+      if (this.fireTimer <= 0) {
+        this.localNetPlayer.sendEvent('fire', {
+          fire: false,
+        });
+        this.fireTimer = rand(10, 60);
+      }
+
+      this.dirTimer--;
+      if (this.dirTimer <= 0) {
+        this.dir = (this.dir + rand(2) + 1) % 3 - 1;
+        this.dirTimer = this.dir === 0 ? rand(30, 120) : rand(15, 30);
+        this.localNetPlayer.sendEvent('turn', { turn: this.dir });
+      }
+    }
+  }
+
+  function startAIPlayer(name) {
+    const aiPlayer = new AIPlayer();
+    const player = startPlayer(aiPlayer.localNetPlayer, name);
+    player.setName(name);
+    g_localAIPlayers.push(aiPlayer);
+  }
+
+  if (settings.demo) {
+    ["Danny", "Brian", "Tami", "Gene", "Rick", "Dave", "Carole", "Terry", "Vanessa"].forEach(startAIPlayer);
+  }
+
 });
 
 
