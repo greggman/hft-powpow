@@ -45,6 +45,9 @@ define(['./player'], function(Player) {
       this.services.audioManager.playSound('play');
     }
     this.players.push(player);
+    if (this.players.length == 2) {
+      this.services.hideInstructions();
+    }
     return player;
   }
 
