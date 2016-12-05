@@ -32,8 +32,8 @@
 
 define([
     '../node_modules/hft-sample-ui/dist/sample-ui',
-    '../bower_components/tdl/tdl/math',
-    '../bower_components/hft-utils/dist/2d',
+    '../3rdparty/tdl/tdl/math',
+    '../3rdparty/hft-utils/dist/2d',
     './ships',
     './shot',
   ], function(

@@ -30,7 +30,7 @@
  */
 "use strict";
 
-define(['../bower_components/hft-utils/dist/2d'], function(M2D) {
+define(['../3rdparty/hft-utils/dist/2d'], function(M2D) {
   /**
    * A shot.
    * @constructor

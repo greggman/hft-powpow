@@ -33,7 +33,7 @@
 
 // TODO: should this really be based on player?
 
-define(["../bower_components/hft-utils/dist/2d", "./player"], function(M2D, Player) {
+define(["../3rdparty/hft-utils/dist/2d", "./player"], function(M2D, Player) {
   /**
    * MetaQueuePlayer is a group controlled player when players are in queue
    * @constructor

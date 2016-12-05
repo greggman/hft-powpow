@@ -35,7 +35,7 @@ requirejs([
     '../node_modules/happyfuntimes/dist/hft',
     '../node_modules/hft-sample-ui/dist/sample-ui',
     '../node_modules/hft-game-utils/dist/game-utils',
-    '../bower_components/hft-utils/dist/audio',
+    '../3rdparty/hft-utils/dist/audio',
     'ships',
   ], function(
     hft,
