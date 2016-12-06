@@ -12,7 +12,7 @@ so they can get back into the game.
 Cloning
 -------
 
-[If you want to clone this follow the instructions here](https://github.com/greggman/HappyFunTimes/blob/master/docs/makinggames.md)
+[If you want to clone this follow the instructions here](http://docs.happyfuntimes.net/docs/makinggames.html)
 
 
 
